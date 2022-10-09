@@ -6,7 +6,7 @@ Provides you with all the core functionality needed:
 
 - Domain: Entities such as Failure and Success, the Use Case abstract class and UseCaseParams.
 - Presentation: The InternetConnectionCubit, PullToRefreshList and RedirectedCachedNetworkImage.
-- Services: Error, InternetConnection and Toast Service.
+- Services: Error and InternetConnectionService.
 - Util: AppBlocObserver, as well as isWebInDesktop and isWebInMobile helper functions.
 
 ## Usage
