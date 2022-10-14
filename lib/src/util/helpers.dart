@@ -11,3 +11,9 @@ bool isWebInMobile(BuildContext context) =>
     (kIsWeb && MediaQuery.of(context).size.width < _desktopBreakPointWidth);
 
 int _desktopBreakPointWidth = 1024;
+
+extension BuildContextData on BuildContext {
+  Size get screenSize => MediaQuery.of(this).size;
+  double get screenHeight => MediaQuery.of(this).size.height;
+  double get screenWidth => MediaQuery.of(this).size.width;
+}
