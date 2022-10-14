@@ -7,7 +7,7 @@ Provides you with all the core functionality needed:
 - Domain: Entities such as Failure and Success, the Use Case abstract class and UseCaseParams.
 - Presentation: The InternetConnectionCubit, PullToRefreshList and RedirectedCachedNetworkImage.
 - Services: Error and InternetConnectionService.
-- Util: AppBlocObserver, as well as isWebInDesktop and isWebInMobile helper functions.
+- Util: AppBlocObserver, AppRouteObserver, useful routing functions as well as isWebInDesktop, isWebInMobile helper functions and a handy extension on the BuildContext to retreive the screen size.
 
 ## Usage
 
