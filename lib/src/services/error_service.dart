@@ -58,46 +58,38 @@ class ErrorService {
     this.showErrorToast,
   });
 
-  Map<String, dynamic> _errorsMap = {};
-  BuildContext? _rootContext;
+  @visibleForTesting
+  Map<String, dynamic> errorsMap = {};
 
-  Future<void> initialize(BuildContext rootContext) async {
-    _rootContext = rootContext;
+  @visibleForTesting
+  BuildContext? rootContext;
+
+  Future<void> initialize(BuildContext context) async {
+    rootContext = context;
     final response = await getErrorsMap();
     response.fold(
       (l) => null,
-      (r) => _errorsMap = json.decode(r) as Map<String, dynamic>,
+      (r) => errorsMap = json.decode(r) as Map<String, dynamic>,
     );
   }
 
-  void setContext(BuildContext context) => _rootContext = context;
+  void setContext(BuildContext context) => rootContext = context;
 
   void showErrorForCode(int code) {
-    final context = _rootContext;
-    if (context == null) return;
-    final languageCode = getLocaleLanguageCodeForContext(context);
+    if (rootContext == null) return;
+    final errorMessage = getErrorMessageForCode(code);
 
-    String? errorMessage;
-    if (_errorsMap.containsKey('$code')) {
-      final codeMap = _errorsMap['$code'] as Map<String, dynamic>;
-      if (codeMap.containsKey(languageCode)) {
-        errorMessage = codeMap[languageCode];
-      }
-    }
-
-    if (errorMessage != null) {
-      showErrorToast?.call(context, errorMessage);
-    }
+    showErrorToast?.call(rootContext!, errorMessage);
   }
 
   String getErrorMessageForCode(int code) {
-    final languageCode = _rootContext != null
-        ? getLocaleLanguageCodeForContext(_rootContext!)
+    final languageCode = rootContext != null
+        ? getLocaleLanguageCodeForContext(rootContext!)
         : defaultLocaleLanguageCode;
 
     String? errorMessage;
-    if (_errorsMap.containsKey('$code')) {
-      final codeMap = _errorsMap['$code'] as Map<String, dynamic>;
+    if (errorsMap.containsKey('$code')) {
+      final codeMap = errorsMap['$code'] as Map<String, dynamic>;
       if (codeMap.containsKey(languageCode)) {
         errorMessage = codeMap[languageCode];
       }
