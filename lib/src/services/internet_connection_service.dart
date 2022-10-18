@@ -1,21 +1,32 @@
+import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'package:candy_core/src/util/helpers.dart';
 
 class InternetConnectionService {
-  InternetConnectionService() : super() {
-    if (!isWebOrMacOS) _internetConnectionChecker = InternetConnectionChecker();
+  InternetConnectionService({this.isMockWebOrMacOS}) : super() {
+    if (!(isMockWebOrMacOS ?? kIsWebOrMacOS)) {
+      internetConnectionChecker = InternetConnectionChecker();
+    }
   }
-  InternetConnectionChecker? _internetConnectionChecker;
+
+  @visibleForTesting
+  bool? isMockWebOrMacOS;
+
+  @visibleForTesting
+  InternetConnectionChecker? internetConnectionChecker;
 
   Stream<InternetConnectionStatus> get onConnectionStatusChange {
-    if (isWebOrMacOS) return Stream.value(InternetConnectionStatus.connected);
-    return _internetConnectionChecker!.onStatusChange;
+    if (isMockWebOrMacOS ?? kIsWebOrMacOS) {
+      return Stream.value(InternetConnectionStatus.connected);
+    }
+    return internetConnectionChecker!.onStatusChange;
   }
 
   Future<bool> get isOffline async {
-    if (isWebOrMacOS) return false;
-    final status = await _internetConnectionChecker?.connectionStatus;
+    if (isMockWebOrMacOS ?? kIsWebOrMacOS) return false;
+    if (internetConnectionChecker == null) return true;
+    final status = await internetConnectionChecker!.connectionStatus;
     return status == InternetConnectionStatus.disconnected;
   }
 }
